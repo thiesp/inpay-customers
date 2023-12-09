@@ -1,10 +1,11 @@
 namespace :customers do
   namespace :db do
     task :load_config do
-      ActiveRecord::Tasks::DatabaseTasks.database_configuration = YAML.load_file("customers/config/database.yml")
-      ActiveRecord::Tasks::DatabaseTasks.db_dir = 'customers/db'
-      ActiveRecord::Tasks::DatabaseTasks.migrations_paths = [ "customers/db/migrate" ]
-      ActiveRecord::Tasks::DatabaseTasks.root = 'customers'
+      root = Customers::Engine.root
+      ActiveRecord::Tasks::DatabaseTasks.database_configuration = YAML.load_file(root + "config/database.yml")
+      ActiveRecord::Tasks::DatabaseTasks.db_dir = root + 'db'
+      ActiveRecord::Tasks::DatabaseTasks.migrations_paths = [ root + "db/migrate" ]
+      ActiveRecord::Tasks::DatabaseTasks.root = root
 
       ActiveRecord::Base.configurations = ActiveRecord::Tasks::DatabaseTasks.database_configuration
       ActiveRecord::Migrator.migrations_paths = ActiveRecord::Tasks::DatabaseTasks.migrations_paths
